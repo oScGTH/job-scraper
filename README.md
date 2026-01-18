@@ -77,3 +77,19 @@ extra blank lines on Windows.
 
 Each CSV file currently contains a single job posting; support for multiple
 entries may be added in a future iteration.
+
+## Scraper Architecture
+
+The project defines a clear architecture for web scraping without coupling it
+to the CLI, data model, or export logic.
+
+Scraping is handled through a dedicated scraper layer, allowing new job sites
+to be added without modifying existing functionality.
+
+### Base Scraper Interface
+
+All scrapers in the project are required to implement a shared base interface.
+This ensures a consistent contract across different job sites.
+
+Each scraper is responsible for handling a single job posting URL and must
+return a structured JobPosting object.
