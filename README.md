@@ -12,8 +12,8 @@ can later be exported to tools such as Excel.
 
 - Command-line interface (CLI)
 - Structured job data model
+- CSV export (Excel-compatible)
 - URL input validation via argparse
-- Clean project structure ready for extension
 
 No web scraping is implemented yet. The current focus is on correctness,
 architecture, and extensibility.
@@ -27,7 +27,53 @@ job-scraper/
 ├── job_scraper/
 │   ├── __init__.py
 │   ├── cli.py        # CLI entry point
-│   └── models.py     # JobPosting data model
+│   ├── models.py     # JobPosting data model
+│   └── exporters.py  # CSV export logi
 ├── outputs/          # Reserved for future exports
 ├── README.md
 └── requirements.txt
+```
+
+## CSV Export (Excel-compatible)
+
+The tool can export structured job posting data to a CSV file that can be opened
+directly in Excel.
+
+The export functionality is implemented as an isolated module to keep concerns
+separated from the CLI and data model.
+
+### Usage
+
+Run the CLI with a job posting URL:
+
+python -m job_scraper.cli https://example.com/job/123
+
+### Default Output
+
+By default, the CSV file is written to:
+
+outputs/job_posting.csv
+
+### Custom Output Path
+
+A custom output path can be provided using the --output flag:
+
+python -m job_scraper.cli https://example.com/job/123 --output outputs/my_jobs.csv
+
+### CSV Structure
+
+The generated CSV file contains the following columns:
+
+- title
+- company
+- location
+- deadline
+- source_url
+
+All fields except source_url may be empty if the information is not available.
+
+The file is written using UTF-8 encoding and avoids common Excel issues such as
+extra blank lines on Windows.
+
+Each CSV file currently contains a single job posting; support for multiple
+entries may be added in a future iteration.
